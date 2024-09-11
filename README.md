@@ -10,4 +10,4 @@ Se ha implementado una nueva lógica para hacer que los fantasmas sigan a Pac-Ma
 - Los fantasmas ajustan su movimiento basándose en las opciones direccionales que los acercan a Pac-Man.
 
 ### Código clave
-Se añadió la función `distance_to_pacman` para calcular la distancia más cercana entre Pac-Man y los fantasmas.
+Se añadieron las funciones `distance` y `best_direction` para calcular la distancia más cercana entre Pac-Man y los fantasmas.
