@@ -87,6 +87,29 @@ def valid(point):
 
     return point.x % 20 == 0 or point.y % 20 == 0
 
+def distance(a,b):
+    """Distancia entre dos puntos con la distancia euclidiana"""
+    return ((a.x - b.x) ** 2 + (a.y - b.y) ** 2) ** 0.5
+
+def best_direction(point, pacman, course):
+    """ Devuelve la mejor direccion para mover al fantasma """
+    options = [
+        vector(5, 0),   # Derecha
+        vector(-5, 0),  # Izquierda
+        vector(0, 5),   # Arriba
+        vector(0, -5)   # Abajo
+    ]
+
+    # filtrar solo las ociones que son validas
+    valid_options = [option for option in options if valid(point + option)]
+    
+    if not valid_options:
+        return course   # cualquier cosa se queda en su estado actual
+    
+    # aca el codigo elige la dirección que minimiza la distancia entre el fantasma y pacman
+    best_option = min(valid_options, key=lambda option: distance(point + option, pacman))
+    
+    return best_option
 
 def world():
     """Draw world using path."""
@@ -131,18 +154,10 @@ def move():
     dot(20, 'yellow')
 
     for point, course in ghosts:
-        if valid(point + course):
-            point.move(course)
-        else:
-            options = [
-                vector(5, 0),
-                vector(-5, 0),
-                vector(0, 5),
-                vector(0, -5),
-            ]
-            plan = choice(options)
-            course.x = plan.x
-            course.y = plan.y
+        # Aca se termina usando la formula euclidiana para mover al fantasma en la mejor dirección
+        new_course = best_direction(point, pacman, course)
+        point.move(new_course)
+        course.x, course.y = new_course.x, new_course.y
 
         up()
         goto(point.x + 10, point.y + 10)
